@@ -470,8 +470,6 @@ git cat-file -p c1de456523c5c4ef403d5f8efe95b9bbfa4ef3c7
 新增的两个对象一个是 tree 对象, 一个是提交对象.
 
 ```
-observer.hany@ali-59375nm:~/tmp/git-hello$ git cat-file -p '4f/d9e45478c1fe4fcebc77c5ad42cf7e3764ccb1'
-fatal: Not a valid object name 4f/d9e45478c1fe4fcebc77c5ad42cf7e3764ccb1
 observer.hany@ali-59375nm:~/tmp/git-hello$ git cat-file -p '4fd9e45478c1fe4fcebc77c5ad42cf7e3764ccb1'
 tree c1de456523c5c4ef403d5f8efe95b9bbfa4ef3c7
 author 涧泉 <observer.hany@alibaba-inc.com> 1378399788 +0800
