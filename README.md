@@ -374,6 +374,7 @@ git 操作命令通常可分为两类
 
 ## 分布式kv - 磁盘上的对象系统
 
+
 删除遗留文件
 
 ```
@@ -426,6 +427,7 @@ observer.hany@ali-59375nm:~/tmp/git-hello$ sha1sum a.txt
 因为 git 对象包含元数据, k 不是简单的文件 SHA1.
 
 修改文件内容后重新添加, 
+
 ```
 echo "bye" >> a.txt
 git add a.txt
@@ -484,46 +486,49 @@ observer.hany@ali-59375nm:~/tmp/git-hello$ git cat-file -p c1de456523c5c4ef403d5
 git 分享总结
 ===
 
-    git 分享的时候提到：本地仓库设置了多个远程仓库时, 默认 push (即不带参数执行 "git push" 命令) 会不会同时向多个仓库 push 数据, 当时没有确认。我查了一下文档(man git-push), 答案是 *不会*.
+&nbsp;&nbsp;&nbsp;&nbsp;
+git 分享的时候提到：本地仓库设置了多个远程仓库时, 默认 push (即不带参数执行 "git push" 命令) 会不会同时向多个仓库 push 数据, 当时没有确认。我查了一下文档(`man git-push`), 答案是 **不会** .
 
-    *默认 push 只会向一个远程仓库 push 数据*, 确定 push 到哪个仓库的规则如下:
-* 如果当前本地分支存在上游远程分支, 则 push 到上游分支对应的仓库.
-* 否则, push 到 origin 仓库.
+* **默认 push 只会向一个远程仓库 push 数据**, 确定 push 到哪个仓库的规则如下:
+	* 如果当前本地分支存在上游远程分支, 则 push 到上游分支对应的仓库.
+	* 否则, push 到 origin 仓库.
 
-    *默认 push 哪些分支由 "push.default" 决定*. 使用 `git config` 设置 "push.default" 的值, 建议设置 `git config --global push.default upstream`.
+* **默认 push 哪些分支由 "push.default" 决定**. 使用 `git config` 设置 "push.default" 的值, 建议设置 `git config --global push.default upstream`.
 
-    *默认 pull 只会 pull 当前分支的上游分支*, 一个本地分支只能设置一个上游分支. 如果当前分支没有设置上游分支, 默认 pull 会报错.
+* **默认 pull 只会 pull 当前分支的上游分支**, 一个本地分支只能设置一个上游分支. 如果当前分支没有设置上游分支, 默认 pull 会报错.
 
 
 ## 示例小结
 
+&nbsp;&nbsp;&nbsp;&nbsp;
 假设 gitlab 上有一个仓库 git-inner-and-use, 包含 master 和 hello 两个分支, master 是当前分支.
 
 0. `git clone git@gitlab.alibaba-inc.com:observer.hany/git-inner-and-use.git`
-* 把整个仓库 clone 到本地, 设置 gitlab 仓库为 origin 远程仓库.
-* 本地建立一个 master 分支对应 origin 上的 master 分支, 设置 origin 上的 master 为上游分支.
-* checkout 出 master 作为当前分支
+	* 把整个仓库 clone 到本地, 设置 gitlab 仓库为 origin 远程仓库.
+	* 本地建立一个 master 分支对应 origin 上的 master 分支, 设置 origin 上的 master 为上游分支.
+	* checkout 出 master 作为当前分支
 
 0. `git checkout hello`
-* 因为本地 hello 分支还不存在, 先在本地建立一个 hello 分支对应 origin 上的 hello 分支, 设置 origin 上的 hello 为上游分支.
-* checkout 出 hello 作为当前分支
+	* 因为本地 hello 分支还不存在, 先在本地建立一个 hello 分支对应 origin 上的 hello 分支, 设置 origin 上的 hello 为上游分支.
+	* checkout 出 hello 作为当前分支
 
 0. `git checkout master`
-* 因为 master 已经是本地分支, 直接 checkout 出 master 作为当前分支
+	* 因为 master 已经是本地分支, 直接 checkout 出 master 作为当前分支
 
 0. `git pull`
-* 拉取当前分支对应的上游分支, 即 origin 上的 master 分支, 与当前分支合并.
-* 将合并结果提交到本地仓库.
+	* 拉取当前分支对应的上游分支, 即 origin 上的 master 分支, 与当前分支合并.
+	* 将合并结果提交到本地仓库.
 
 0. `git push`
-	因为当前分支对应上游分支的仓库是 origin, 只会向 origin 推送数据. 
-	根据 "push.default" 决定要推送哪些分支.
+因为当前分支对应上游分支的仓库是 origin, 只会向 origin 推送数据. 
+根据 "push.default" 决定要推送哪些分支.
 	* *"matching"* (git 1.x 默认值). 本地与 origin 上 *同名* 的分支, 即 master 和 hello, 都会被推送到 origin 上.
 	* *"upstream"*. 当前分支对应的*上游分支*, 即 master, 会被推送到 origin 上.
 	* *"simple"* (git 2.x 默认值, 仅 git 2.x 支持). 当前分支对应的*上游分支*, 并且 *同名*, 即 master, 会被推送到 origin 上.
 
 
+&nbsp;&nbsp;&nbsp;&nbsp;
 这次分享由于想说的东西太多, 没有组织好, 讲的比较乱比较散, 
-可能大家会听的云里雾里, 自己也有点迷糊. 
+可能大家会听的云里雾里, 自己也有点晕. 
 因为时间有限, 可能只围绕两三个核心问题展开深入讨论, 效果会更好, 也算是个经验教训.
 
