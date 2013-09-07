@@ -498,33 +498,40 @@ git 分享的时候提到：本地仓库设置了多个远程仓库时, 默认 p
 * **默认 pull 只会 pull 当前分支的上游分支**, 一个本地分支只能设置一个上游分支. 如果当前分支没有设置上游分支, 默认 pull 会报错.
 
 
-## 示例小结
+### 操作示例小结
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 假设 gitlab 上有一个仓库 git-inner-and-use, 包含 master 和 hello 两个分支, master 是当前分支.
 
 0. `git clone git@gitlab.alibaba-inc.com:observer.hany/git-inner-and-use.git`
 	* 把整个仓库 clone 到本地, 设置 gitlab 仓库为 origin 远程仓库.
-	* 本地建立一个 master 分支对应 origin 上的 master 分支, 设置 origin 上的 master 为上游分支.
+	* 从 origin 上的 master 分支建立本地 master 分支, 设置 origin 上的 master 为上游分支.
 	* checkout 出 master 作为当前分支
 
 0. `git checkout hello`
-	* 因为本地 hello 分支还不存在, 先在本地建立一个 hello 分支对应 origin 上的 hello 分支, 设置 origin 上的 hello 为上游分支.
+	* 本地 hello 分支不存在, 从 origin 上的 hello 分支建立本地 hello 分支, 设置 origin 上的 hello 为上游分支.
 	* checkout 出 hello 作为当前分支
 
 0. `git checkout master`
-	* 因为 master 已经是本地分支, 直接 checkout 出 master 作为当前分支
+	* 本地存在 master 分支, checkout 出 master 作为当前分支
 
 0. `git pull`
 	* 拉取当前分支对应的上游分支, 即 origin 上的 master 分支, 与当前分支合并.
 	* 将合并结果提交到本地仓库.
 
 0. `git push`
-因为当前分支对应上游分支的仓库是 origin, 只会向 origin 推送数据. 
-根据 "push.default" 决定要推送哪些分支.
-	* *"matching"* (git 1.x 默认值). 本地与 origin 上 *同名* 的分支, 即 master 和 hello, 都会被推送到 origin 上.
-	* *"upstream"*. 当前分支对应的*上游分支*, 即 master, 会被推送到 origin 上.
-	* *"simple"* (git 2.x 默认值, 仅 git 2.x 支持). 当前分支对应的*上游分支*, 并且 *同名*, 即 master, 会被推送到 origin 上.
+
+	当前分支对应上游分支的仓库是 origin, 默认会向 origin 推送数据. 
+"push.default" 配置决定要推送哪些分支.
+	* " **matching** " (git 1.x 默认值).
+
+		本地与 origin 上 *同名* 的分支, 即 master 和 hello, 都会被推送到 origin 上.
+	* " **upstream** " (建议 1.x 设置为这个值, `git config --global push.default upstream`)
+
+		当前分支对应的 *上游分支*, 即 master, 会被推送到 origin 上.
+	* " **simple** " (git 2.x 默认值, 仅 git 2.x 支持). 
+
+		当前分支对应的 *上游分支*, 并且 *同名*, 即 master, 会被推送到 origin 上.
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;
